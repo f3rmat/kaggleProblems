@@ -1,12 +1,15 @@
 from collections import Counter
 import csv
 import id3
+import numpy
+import pandas
+import sklearn
 
 if __name__ == '__main__':
-    with open('train.csv') as f:
+    with open('../input/train.csv') as f:
         reader = csv.DictReader(f)
         train = list(reader)
-    with open('test.csv') as f:
+    with open('../input/test.csv') as f:
         reader = csv.DictReader(f)
         test = list(reader)
 

@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import statistics
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
 
 def fill_in_missing_fares(train, test): 
 	pclass_to_avg_fare_map = {}
@@ -60,13 +60,20 @@ def main():
 	#Train DecisionTreeClassifier
 	Y_train = train['Survived']
 	X_Train = train.drop(['Ticket', 'Cabin', 'Name', 'PassengerId', 'SibSp', 'Parch', 'Embarked', 'Survived'], axis=1)
-	decision_tree = DecisionTreeClassifier()
-	decision_tree.fit(X_Train, Y_train)
+	random_forest = RandomForestClassifier(criterion='gini', 
+                             n_estimators=700,
+                             min_samples_split=10,
+                             min_samples_leaf=1,
+                             max_features='auto',
+                             oob_score=True,
+                             random_state=1,
+                             n_jobs=-1)
+	random_forest.fit(X_Train, Y_train)
 
 	#Use DecisionTreeClassifier to predict
 	test = test.drop(['Ticket', 'Cabin', 'Name', 'SibSp', 'Parch', 'Embarked'], axis=1)
 	X_test  = test.drop("PassengerId", axis=1)
-	Y_test = decision_tree.predict(X_test)
+	Y_test = random_forest.predict(X_test)
 	submission = pd.DataFrame({
 	    'PassengerId': test['PassengerId'],
 	    'Survived': Y_test

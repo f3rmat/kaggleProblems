@@ -17,7 +17,12 @@ if __name__ == '__main__':
 
     tree = id3.ID3(train, significant_attrs, class_attr)
 
-    print('PassengerId,Survived')
+    csvData = [['PassengerId', 'Survived']]
     for row in test:
-        o = tree.query(row)
-        print(row['PassengerId'], o, sep=',')
+        csvData.append([row['PassengerId'], tree.query(row)])
+
+    with open('person.csv', 'w') as csvFile:
+        writer = csv.writer(csvFile)
+        writer.writerows(csvData)
+
+    csvFile.close()

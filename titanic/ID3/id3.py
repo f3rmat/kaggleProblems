@@ -20,14 +20,14 @@ class ID3:
         return -sum(p * log2(p) for p in probs if p > 0)
 
     #Calculates the probabilities with which the 
-    #various class attributes occur in the training data
+    #various attr occur in dataset passed
     #then calls get_expected_information_required method
     @staticmethod
-    def get_info_required_from_class_attribute_probability(dataset, class_attr):
-        classes = set(row[class_attr] for row in dataset)
+    def get_info_required_for_branching_on_attr(dataset, attr):
+        classes = set(row[attr] for row in dataset)
         probs = []
         for c in classes:
-            subset = (row for row in dataset if row[class_attr] == c)
+            subset = (row for row in dataset if row[attr] == c)
             probs.append(sum(1 for row in subset))
         probs = [p/sum(probs) for p in probs]
 
@@ -38,7 +38,7 @@ class ID3:
     def get_information_gained_by_branching_on_attr(dataset, attr, class_attr):
         #get the expected information required for the entire training dataset
         #this will be I(p, n)
-        total_expected_information_required = ID3.get_info_required_from_class_attribute_probability(dataset, class_attr)
+        total_expected_information_required = ID3.get_info_required_for_branching_on_attr(dataset, class_attr)
 
         options = set(row[attr] for row in dataset)
         #proportion_list_for_attr_values will contain (pi + ni)/(p + n)
@@ -50,9 +50,10 @@ class ID3:
             subset = [row for row in dataset if row[attr] == o]
             proportion_list_for_attr_values.append(sum(1 for row in subset))
 
-            expected_information_required_list_for_attr_values.append(ID3.get_info_required_from_class_attribute_probability(subset, class_attr))
+            expected_information_required_list_for_attr_values.append(ID3.get_info_required_for_branching_on_attr(subset, class_attr))
         proportion_list_for_attr_values = [f/sum(proportion_list_for_attr_values) for f in proportion_list_for_attr_values]
 
+        #return I(p,n) - summation_of(I(pi,ni)*((pi+ni)/(p+n)))
         return total_expected_information_required - sum(f * e for f, e in zip(proportion_list_for_attr_values, expected_information_required_list_for_attr_values))
 
     def _id3(self, dataset, attrs, class_attr):
@@ -69,7 +70,7 @@ class ID3:
                 key=lambda attr: information_gain[attr]
                 )
 
-        if abs(ID3.get_info_required_from_class_attribute_probability(dataset, class_attr)) < float_info.epsilon:
+        if abs(ID3.get_info_required_for_branching_on_attr(dataset, class_attr)) < float_info.epsilon:
             root['class'] = dataset[0][class_attr]
         elif abs(max(information_gain.values())) < float_info.epsilon:
             classes = set(row[class_attr] for row in dataset)

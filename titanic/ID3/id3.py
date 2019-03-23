@@ -36,7 +36,8 @@ class ID3:
     #Calculates the information gained by branching on attribute attr
     @staticmethod
     def get_information_gained_by_branching_on_attr(dataset, attr, class_attr):
-        #get the expected information required for the entire training dataset
+        #get the expected information required for labeling
+        #the subset of the dataset at the current node
         #this will be I(p, n)
         total_expected_information_required = ID3.get_info_required_for_branching_on_attr(dataset, class_attr)
 
@@ -69,9 +70,14 @@ class ID3:
                 (attr for attr in information_gain),
                 key=lambda attr: information_gain[attr]
                 )
-
+        #If the information required to branch off on class_attr is 0
+        #then we have reached a leaf node. the dataset has a single value 
+        #for the class_attr, so no information is further required to do branching. 
         if abs(ID3.get_info_required_for_branching_on_attr(dataset, class_attr)) < float_info.epsilon:
             root['class'] = dataset[0][class_attr]
+        #If maximum information gain is 0 by branching off any of the left 
+        #attributes, then select the most common class_atr value and 
+        #set root{'class'} to that class_atr value. 
         elif abs(max(information_gain.values())) < float_info.epsilon:
             classes = set(row[class_attr] for row in dataset)
             occurrences = Counter(row[class_attr] for row in dataset)

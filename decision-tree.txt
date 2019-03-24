@@ -1,0 +1,36 @@
+Decision Tree: 
+1) ID3 paper: https://link.springer.com/content/pdf/10.1007%2FBF00116251.pdf
+
+implementation of the same: https://github.com/f3rmat/kaggleProblems/tree/master/titanic/ID3
+
+This uses information gain wala as: 
+
+-(summation of (p*log2(p)))
+
+Information gain = 
+
+(Expected information required at the root node) - (weighted average of the information required after branching off)
+
+2) CART: This uses gini inmpurity: https://en.wikipedia.org/wiki/Decision_tree_learning#Gini_impurity
+
+Very well explained here: https://youtu.be/LDRbO9a6XPU?t=262
+
+See the weighted average part of gini impurity. 
+
+Information gain = (gini impurity at parent node) - (weighted average of gini impurity after branching off attribute)
+
+3) C4.5 algorithm: (Quinlan's paper: http://www.cs.ecu.edu/~dingq/CSCI6905/readings/BaggingBoosting.pdf)
+
+implementation: https://github.com/barisesmer/C4.5
+
+well explained here: https://cis.temple.edu/~giorgio/cis587/readings/id3-c45.html
+
+Improved version on ID3 by Quinlan's. The new features (versus ID3) are: (i) accepts both continuous and discrete features; (ii) handles incomplete data points; (iii) solves over-fitting problem by (very clever) bottom-up technique usually known as "pruning"; and (iv) different weights can be applied the features that comprise the training data.
+
+Read this: https://stackoverflow.com/questions/9979461/different-decision-tree-algorithms-with-comparison-of-complexity-or-performance
+
+Read this paper: https://saiconference.com/Downloads/SpecialIssueNo10/Paper_3-A_comparative_study_of_decision_tree_ID3_and_C4.5.pdf
+
+Good resource for Chi square test: https://www.mathsisfun.com/data/chi-square-test.html
+
+ Good paper that summarizes difference between CART, ID3, C4.5 etc: https://s3.amazonaws.com/academia.edu.documents/54032306/ComparativeStudyId3CartAndC4.5DecisionTreeAlgorithmASurvey.pdf?AWSAccessKeyId=AKIAIWOWYYGZ2Y53UL3A&Expires=1553415911&Signature=%2BjWGHsu5ecHhOw0mKFaPtGCPTx0%3D&response-content-disposition=inline%3B%20filename%3DComparative_Study_Id3_Cart_And_C4.5_Deci.pdf
